@@ -1,0 +1,11 @@
+version: '2'
+services:
+  sample-golang-grpc-microservice:
+    build: .
+    image: sample-golang-grpc-microservice:1.0
+    container_name: sample-golang-grpc-microservice
+    hostname: sample-golang-grpc-microservice
+    #entrypoint: sleep 3h
+    ports:
+      - "8080:80"
+    network_mode: bridge

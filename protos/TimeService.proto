@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package com.test.minixxie;
+
+service TimeService {
+  rpc Now(NowRequest) returns (NowResponse);
+}
+
+message NowRequest {
+  string msg = 1;
+}
+message NowResponse {
+  string msg = 1;
+  string now = 2;
+}
