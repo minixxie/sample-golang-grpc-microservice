@@ -1,8 +1,10 @@
 package main
 
 import (
-//    "google.golang.org/grpc"
-//    pb "./pb"
+    "net"
+    "log"
+    "google.golang.org/grpc"
+    pb "./pb"
 )
 
 const (
@@ -16,15 +18,16 @@ type server struct{}
 //}
 
 func main() {
-//	lis, err := net.Listen("tcp", port)
-//	if err != nil {
-//		log.Fatalf("failed to listen: %v", err)
-//	}
-//	s := grpc.NewServer()
+	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
 //	pb.RegisterGreeterServer(s, &server{})
+//	pb.init()
 //	// Register reflection service on gRPC server.
 //	reflection.Register(s)
-//	if err := s.Serve(lis); err != nil {
-//		log.Fatalf("failed to serve: %v", err)
-//	}
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
