@@ -15,6 +15,7 @@ const (
 type server struct{}
 
 func (s *server) Now(ctx context.Context, in *pb.NowRequest) (*pb.NowResponse, error) {
+    log.Printf("Endpoint will return: Now = Night")
 	return &pb.NowResponse{Msg: "Hello " + in.Msg, Now: "Night"}, nil
 }
 
