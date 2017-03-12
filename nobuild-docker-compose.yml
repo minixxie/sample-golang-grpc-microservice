@@ -1,0 +1,13 @@
+version: '2'
+services:
+  sample-golang-grpc-microservice:
+    image: minixxie/golang:1.7
+    container_name: sample-golang-grpc-microservice
+    hostname: sample-golang-grpc-microservice
+    volumes:
+      - ".:/go/src/app"
+    working_dir: /go/src/app
+    command: ./entry.sh
+    ports:
+      - "8080:80"
+    network_mode: bridge
