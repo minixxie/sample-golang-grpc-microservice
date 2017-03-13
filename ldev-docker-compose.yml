@@ -7,7 +7,7 @@ services:
     volumes:
       - ".:/go/src/app"
     working_dir: /go/src/app
-    command: ./entry.sh
+    command: ./docker-entry.sh
     ports:
       - "8080:80"
     networks:
