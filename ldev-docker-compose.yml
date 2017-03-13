@@ -10,4 +10,15 @@ services:
     command: ./entry.sh
     ports:
       - "8080:80"
-    network_mode: bridge
+    networks:
+      - ldev-backend
+      - mongo_default
+    environment:
+      - MONGO_URI=${MONGO_URI}
+networks:
+  ldev-backend:
+    external:
+      name: ldev-backend
+  mongo_default:
+    external:
+      name: mongo_default
