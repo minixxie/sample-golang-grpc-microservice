@@ -8,9 +8,7 @@ import "google.golang.org/grpc"
 import pb "pb"
 import "gopkg.in/mgo.v2"
 
-const (
-	port = ":80"
-)
+const port = ":80"
 
 type server struct{}
 
