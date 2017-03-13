@@ -1,4 +1,4 @@
 [submodule "devops"]
 	path = devops
 	url = git@github.com:minixxie/devops.git
-	branch = 0.0.0
+	branch = :refs/tags/0.0.0
