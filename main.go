@@ -10,35 +10,25 @@ import "gopkg.in/mgo.v2"
 
 const port = ":80"
 
-type server struct{}
+type Server struct{
+    MongoSession *mgo.Session
+}
 
 type Rating struct {
     Rating int
 }
 
-func (s *server) Now(ctx context.Context, in *pb.NowRequest) (*pb.NowResponse, error) {
+func (server *Server) Now(ctx context.Context, in *pb.NowRequest) (*pb.NowResponse, error) {
     log.Printf("Endpoint will return: Now = Night")
 
-    // MONGO_URI=
-    mongoUri := os.Getenv("MONGO_URI")
-    log.Println("Pkg mgo is using MONGO_URI: ", mongoUri)
-    dialInfo, err := mgo.ParseURL(mongoUri)
-    if err != nil {
-        log.Println("Failed to parse URI: ", err)
-        panic(err)
-    }
-
-    session, err := mgo.DialWithInfo(dialInfo)
-    if err != nil {
-        panic(err)
-    }
+    session := server.MongoSession.Copy()
     defer session.Close()
 
     rating1 := Rating {
         Rating: 15,
     }
     ratingsCollection := session.DB("").C("Ratings")
-    err = ratingsCollection.Insert(rating1)
+    err := ratingsCollection.Insert(rating1)
     if err != nil {
         log.Fatal(err)
     }
@@ -49,17 +39,32 @@ func (s *server) Now(ctx context.Context, in *pb.NowRequest) (*pb.NowResponse, e
 
 func main() {
     mongoUri := os.Getenv("MONGO_URI")
+    log.Println("Pkg mgo is using MONGO_URI: ", mongoUri)
     if mongoUri == "" {
         log.Fatalf("Please specify environment variable MONGO_URI")
     }
-    log.Println("MONGO_URI := ", mongoUri)
+
+    dialInfo, err := mgo.ParseURL(mongoUri)
+    if err != nil {
+        log.Println("Failed to parse URI: ", err)
+        panic(err)
+    }
+
+    session, err := mgo.DialWithInfo(dialInfo)
+    if err != nil {
+        panic(err)
+    }
+    server := Server {
+        MongoSession: session,
+    }
+
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
     log.Println("Listening gRPC at port ", port)
 	s := grpc.NewServer()
-	pb.RegisterTimeServiceServer(s, &server{})
+	pb.RegisterTimeServiceServer(s, &server)
 //	// Register reflection service on gRPC server.
 //	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
