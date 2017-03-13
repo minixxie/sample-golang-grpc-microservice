@@ -6,6 +6,7 @@ import "os"
 import "google.golang.org/grpc"
 import pb "pb"
 import "gopkg.in/mgo.v2"
+import "gopkg.in/spf13/viper.v0"
 
 const port = ":80"
 
@@ -14,7 +15,16 @@ type Server struct{
 }
 
 func main() {
-    mongoUri := os.Getenv("MONGO_URI")
+    // load JSON config file from ./config
+    env := os.Getenv("ENV")
+    viper.SetConfigName(env)
+    viper.AddConfigPath("./config")
+    err := viper.ReadInConfig()
+    if err != nil {
+        log.Fatalf("Please prepare ./config/%s.json", env)
+    }
+
+    mongoUri := viper.GetString("mongoUri")
     log.Println("Pkg mgo is using MONGO_URI: ", mongoUri)
     if mongoUri == "" {
         log.Fatalf("Please specify environment variable MONGO_URI")

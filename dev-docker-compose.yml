@@ -1,24 +1,24 @@
 version: '2'
 services:
-  ldev-sample-golang-grpc-microservice:
+  dev-sample-golang-grpc-microservice:
     image: minixxie/golang:1.7
-    container_name: ldev-sample-golang-grpc-microservice
-    hostname: ldev-sample-golang-grpc-microservice
+    container_name: dev-sample-golang-grpc-microservice
+    hostname: dev-sample-golang-grpc-microservice
     volumes:
       - ".:/go/src/app"
     working_dir: /go/src/app
     command: ./docker-entry.sh
     ports:
-      - "8080:80"
+      - "8081:80"
     networks:
-      - ldev-backend
+      - dev-backend
       - mongo_default
     environment:
-      - ENV=ldev
+      - ENV=dev
 networks:
-  ldev-backend:
+  dev-backend:
     external:
-      name: ldev-backend
+      name: dev-backend
   mongo_default:
     external:
       name: mongo_default
